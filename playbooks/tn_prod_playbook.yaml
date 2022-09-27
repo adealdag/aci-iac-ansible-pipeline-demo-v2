@@ -26,7 +26,6 @@
       cisco.aci.aci_tenant:
         <<: *aci_login
         tenant: "{{ tenant_name }}"
-        description: "Tenant created from ansible"
 
     - name: Add VRF
       cisco.aci.aci_vrf:
