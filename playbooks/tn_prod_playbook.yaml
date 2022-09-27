@@ -26,9 +26,7 @@
       cisco.aci.aci_tenant:
         <<: *aci_login
         tenant: "{{ tenant_name }}"
-        description: |
-          Tenant controlled by CI/CD pipeline.
-          Last modified by {{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}
+        description: "Tenant created from ansible"
 
     - name: Add VRF
       cisco.aci.aci_vrf:
