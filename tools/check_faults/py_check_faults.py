@@ -1,5 +1,6 @@
 import logging
 import sys
+import os
 
 from cobra.mit.access import MoDirectory
 from cobra.mit.session import LoginSession
@@ -34,6 +35,8 @@ fault_tab = []
 
 # Parse the faults to add in the list
 for fault in faults:
+    if fault.severity == "cleared":
+        continue
     dn = str(fault.dn)
     split_dn = dn.split("/")
     if dn.startswith("uni/tn-"):
