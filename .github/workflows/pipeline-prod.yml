@@ -17,7 +17,7 @@ jobs:
   # Take a snapshot of the ACI fabric
   snapshot:
     runs-on: self-hosted
-    container: adealdag/aci_cobra:4.2.3n
+    container: adealdag/aci_cobra:5.2.4e
 
     steps:
       - uses: actions/checkout@v2
@@ -48,3 +48,32 @@ jobs:
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml
           rm vault.key
         working-directory: playbooks
+
+  fault-check:
+    runs-on: self-hosted
+    needs: [ansible-deploy]
+    container: adealdag/aci_cobra:5.2.4e
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Verify new faults
+        env:
+          APIC_HOST: ${{ secrets.APIC_HOST }}
+          APIC_USERNAME: ${{ secrets.APIC_USERNAME }}
+          APIC_PASSWORD: ${{ secrets.APIC_PASSWORD }}
+        run: |
+          python ./tools/check_faults/py_check_faults.py prod
+
+      - name: Send Webex Notification
+        uses: adealdag/action-webex-notification@python-v1
+        if: always()
+        with:
+          webexToken: ${{ secrets.WEBEX_TOKEN }}
+          roomID: ${{ secrets.ROOM_ID }}
+          markdownMsg: |
+            ### [${{ github.job }}] ${{ github.repository }} - ${{ github.event.head_commit.message }}
+            * Trigger: ${{ github.event_name }}
+            * Git SHA: ${{ github.sha }}
+            * Status: ${{ job.status }}
+            * Details URL: [Job Results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
