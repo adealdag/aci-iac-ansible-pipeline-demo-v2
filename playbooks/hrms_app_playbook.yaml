@@ -17,7 +17,7 @@
       annotation: "orchestrator:ansible"
       state: present
       output_path: |
-        "dryrun_{{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}.json"
+        dryrun_{{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}.json
 
   vars_files:
     - ./hrms_app_vars.yaml
