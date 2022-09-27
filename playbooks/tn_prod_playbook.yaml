@@ -28,7 +28,7 @@
         tenant: "{{ tenant_name }}"
         description: |
           Tenant controlled by CI/CD pipeline.
-          Last modified by commit {{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}
+          Last modified by {{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}
 
     - name: Add VRF
       cisco.aci.aci_vrf:
