@@ -105,7 +105,7 @@ jobs:
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
-          ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -vvvv
           rm vault.key
         working-directory: tools/pre-change-playbook
 
