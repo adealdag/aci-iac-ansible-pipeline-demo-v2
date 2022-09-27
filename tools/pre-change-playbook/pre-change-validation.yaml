@@ -18,7 +18,6 @@
         file: "config_{{ git_commit_sha }}.json"
         state: present
 
-
     - name: Wait to complete and validate Pre-Change Analysis results
       cisco.nd.nd_pcv_delta_analysis:
         insights_group: "{{ ig_name }}"
