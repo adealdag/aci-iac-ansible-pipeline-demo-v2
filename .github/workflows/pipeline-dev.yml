@@ -101,6 +101,7 @@ jobs:
       - name: Run pre-change analysis playbook
         env:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
+          ANSIBLE_COLLECTIONS_PATH: /root/.ansible/collections:/usr/share/ansible/collections
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
