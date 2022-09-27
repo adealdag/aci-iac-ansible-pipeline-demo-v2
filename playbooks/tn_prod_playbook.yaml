@@ -41,7 +41,7 @@
     #     tenant: "{{ tenant_name }}"
     #     bd: "{{ item.name }}"
     #     vrf: "{{ vrf_name }}"
-    #     l2_unknown_unicast: "{{ 'proxy' if (item.mode == 'L3') else 'flood' }}"
+    #  l2_unknown_unicast: "{{ 'proxy' if (item.mode == 'L3') else 'flood' }}"
     #     arp_flooding: yes
     #     enable_routing: "{{ 'yes' if (item.mode == 'L3') else 'no' }}"
     #   loop: "{{ bridge_domains }}"
