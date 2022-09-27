@@ -61,6 +61,7 @@ jobs:
           ansible --version
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml --check
+          ls -al
           rm vault.key
         working-directory: playbooks
 
