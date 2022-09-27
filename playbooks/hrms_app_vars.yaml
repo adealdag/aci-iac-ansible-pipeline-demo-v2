@@ -1,4 +1,4 @@
-tenant_name: prod
+tenant_name: pcv_prod_tn
 app_name: hrms_app
 epgs:
   - name: hrms_fe_epg

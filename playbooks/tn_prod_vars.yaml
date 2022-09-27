@@ -10,11 +10,11 @@ bridge_domains:
   - name: 192.168.22.0_24_bd
     mode: L3
     gateway: 192.168.22.1/24
-    scope: [public]
+    scope: [private]
   - name: 192.168.23.0_24_bd
     mode: L3
     gateway: 192.168.23.1/24
-    scope: [public]
+    scope: [private]
 
 contracts:
   - name: web_to_app_con
@@ -64,3 +64,32 @@ contracts:
     filters:
       - mariadb
       - icmp
+
+filters:
+  - name: icmp
+    entries:
+      - entry: icmp
+        ethertype: ip
+        ip_protocol: icmp
+  - name: https
+    entries:
+      - entry: https
+        ethertype: ip
+        ip_protocol: tcp
+        dst_port: https
+  - name: dns
+    entries:
+      - entry: dns_tcp
+        ethertype: ip
+        ip_protocol: tcp
+        dst_port: dns
+      - entry: dns_udp
+        ethertype: ip
+        ip_protocol: udp
+        dst_port: dns
+  - name: mariadb
+    entries:
+      - entry: mariadb
+        ethertype: ip
+        ip_protocol: tcp
+        dst_port: 3306
