@@ -16,8 +16,7 @@
       validate_certs: "{{ aci_validate_certs }}"
       annotation: "orchestrator:ansible"
       state: present
-      output_path: |
-        dryrun_{{ lookup('ansible.builtin.env', 'GITHUB_SHA') }}.json
+      output_path: dryrun_data.json
 
   vars_files:
     - ./hrms_app_vars.yaml
