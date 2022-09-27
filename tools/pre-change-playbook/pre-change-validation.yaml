@@ -16,7 +16,7 @@
         ig_name: "{{ ig_name }}"
         site_name: "{{ site_name }}"
         name: "pcv_{{ git_commit_sha }}"
-        file: "dryrun_{{ git_commit_sha }}.json"
+        file: "dryrun_data.json"
         state: present
 
     - name: Wait to complete and validate Pre-Change Analysis results
