@@ -1,6 +1,6 @@
-tenant_name: prod
-vrf_name: main_vrf
-l3out_name: shared_l3out
+tenant_name: pcv_prod_tn
+vrf_name: prod_vrf
+l3out_name: pcv_shared_l3out
 
 bridge_domains:
   - name: 192.168.21.0_24_bd
