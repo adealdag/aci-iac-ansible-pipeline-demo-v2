@@ -68,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: config-dump
-          path: playbooks/dryrun_data.json
+          path: playbooks/dryrun_$GITHUB_SHA.json
 
       - name: Send Webex Notification
         uses: adealdag/action-webex-notification@python-v1
@@ -104,7 +104,7 @@ jobs:
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
-          ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -e "git_commit_sha=$GITHUB_SHA"
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml
           rm vault.key
         working-directory: tools/pre-change-playbook
 
