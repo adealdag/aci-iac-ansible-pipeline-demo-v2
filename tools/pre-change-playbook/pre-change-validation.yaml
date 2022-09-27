@@ -1,0 +1,30 @@
+# Pre-change validation - Creates a pre-change validation using a JSON file, waits for the result and evaluates it 
+---
+
+- name: Run Pre-change validation
+  hosts: nd
+  gather_facts: no
+
+  vars:
+    ig_name: dc_spain
+    site_name: MLG01
+
+  tasks:
+    - name: Create a new Pre-Change Analysis from file
+      cisco.nd.nd_pcv:
+        ig_name: "{{ ig_name }}"
+        site_name: "{{ site_name }}"
+        name: "pcv_{{ git_commit_sha }}"
+        file: "config_{{ git_commit_sha }}.json"
+        state: present
+
+
+    - name: Wait to complete and validate Pre-Change Analysis results
+      cisco.nd.nd_pcv_delta_analysis:
+        insights_group: "{{ ig_name }}"
+        site_name: "{{ site_name }}"
+        name: "pcv_{{ git_commit_sha }}"
+        state: validate
+        exclude_ack_anomalies: yes
+        epoch_choice: epoch2
+      register: pcv_result
