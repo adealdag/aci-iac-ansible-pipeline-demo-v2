@@ -87,7 +87,7 @@ jobs:
   pre-change-validation:
     runs-on: self-hosted
     needs: ansible-dry-run
-    container: adealdag/python:3.9.10-mod
+    container: adealdag/ansible:latest
 
     steps:
       - uses: actions/checkout@v2
