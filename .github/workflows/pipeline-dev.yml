@@ -103,6 +103,7 @@ jobs:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
           ANSIBLE_COLLECTIONS_PATH: /usr/share/ansible/collections
         run: |
+          whoami
           ansible --version
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -vvvv
