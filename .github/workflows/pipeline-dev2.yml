@@ -1,11 +1,11 @@
 # Networking CICD Pipeline with pre-change validation powered by Nexus Dashboard
-name: pipeline-dev
+name: pipeline-dev-test
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push (and merge) events on the dev branch
   push:
-    branches: [prod]
+    branches: [dev]
 
 # Environment variables
 env:
