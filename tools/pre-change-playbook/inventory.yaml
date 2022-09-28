@@ -17,4 +17,4 @@ dcmdr:
         ansible_network_os: cisco.nd.nd
         ansible_httpapi_validate_certs: false
         ansible_httpapi_use_ssl: true
-        ansible_httpapi_use_proxy: true
+        ansible_httpapi_use_proxy: false
