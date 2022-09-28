@@ -3,7 +3,7 @@ dcmdr:
     nd:
       hosts:
         vnd02-mdr1.cisco.com:
-          ansible_host: 10.50.3.134
+          ansible_host: vnd02-app3-mdr1.cisco.com
           ansible_user: admin
           ansible_ssh_pass: !vault |
             $ANSIBLE_VAULT;1.1;AES256
