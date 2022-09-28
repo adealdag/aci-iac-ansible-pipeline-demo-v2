@@ -23,12 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: config-dump
-          path: tools/pre-change-playbook
-
       - name: Run pre-change analysis playbook
         env:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
@@ -41,16 +35,3 @@ jobs:
           ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -vvvv
           rm vault.key
         working-directory: tools/pre-change-playbook
-
-      - name: Send Webex Notification
-        uses: adealdag/action-webex-notification@python-v1
-        if: always()
-        with:
-          webexToken: ${{ secrets.WEBEX_TOKEN }}
-          roomID: ${{ secrets.ROOM_ID }}
-          markdownMsg: |
-            ### [${{ github.job }}] ${{ github.repository }} - ${{ github.event.head_commit.message }}
-            * Trigger: ${{ github.event_name }}
-            * Git SHA: ${{ github.sha }}
-            * Status: ${{ job.status }}
-            * Details URL: [Nexus Dashboard Insights](${{ secrets.ND_HOST }}/appcenter/cisco/nexus-insights/ui/#/changeManagement/preChangeAnalysis)
