@@ -1,0 +1,56 @@
+# Networking CICD Pipeline with pre-change validation powered by Nexus Dashboard
+name: pipeline-dev
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push (and merge) events on the dev branch
+  push:
+    branches: [prod]
+
+# Environment variables
+env:
+  IG_NAME: dc_spain
+  SITE_NAME: MLG01
+  PYTHONWARNINGS: "ignore:Unverified HTTPS request"
+
+jobs:
+  # Run pre-change validation on Nexus Dashboard Insights. Uses the artifact saved previously
+  pre-change-validation:
+    runs-on: self-hosted
+    needs: ansible-dry-run
+    container: adealdag/ansible:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: config-dump
+          path: tools/pre-change-playbook
+
+      - name: Run pre-change analysis playbook
+        env:
+          VAULT_KEY: ${{ secrets.VAULT_KEY }}
+          ND_HOST: ${{ secrets.ND_HOST }}
+        run: |
+          ansible --version
+          export no_proxy=$ND_HOST,$no_proxy
+          echo $VAULT_KEY > vault.key
+          ansible-galaxy collection install cisco-nd-0.1.2-beta.tar.gz --force-with-deps
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -vvvv
+          rm vault.key
+        working-directory: tools/pre-change-playbook
+
+      - name: Send Webex Notification
+        uses: adealdag/action-webex-notification@python-v1
+        if: always()
+        with:
+          webexToken: ${{ secrets.WEBEX_TOKEN }}
+          roomID: ${{ secrets.ROOM_ID }}
+          markdownMsg: |
+            ### [${{ github.job }}] ${{ github.repository }} - ${{ github.event.head_commit.message }}
+            * Trigger: ${{ github.event_name }}
+            * Git SHA: ${{ github.sha }}
+            * Status: ${{ job.status }}
+            * Details URL: [Nexus Dashboard Insights](${{ secrets.ND_HOST }}/appcenter/cisco/nexus-insights/ui/#/changeManagement/preChangeAnalysis)

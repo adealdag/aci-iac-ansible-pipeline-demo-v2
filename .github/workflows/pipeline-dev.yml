@@ -1,5 +1,5 @@
 # Networking CICD Pipeline with pre-change validation powered by Nexus Dashboard
-name: pipeline-dev
+name: pipeline-dev-test
 
 # Controls when the workflow will run
 on:
