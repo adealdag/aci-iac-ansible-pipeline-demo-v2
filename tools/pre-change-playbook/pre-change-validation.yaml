@@ -25,7 +25,6 @@
         name: "pcv_{{ git_commit_sha }}"
         file: "dryrun_data.json"
         state: present
-        output_level: debug
 
     - name: Wait to complete and validate Pre-Change Analysis results
       cisco.nd.nd_pcv_delta_analysis:
@@ -36,5 +35,4 @@
         state: validate
         exclude_ack_anomalies: yes
         epoch_choice: epoch2
-        output_level: debug
       register: pcv_result
