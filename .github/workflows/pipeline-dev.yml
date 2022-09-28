@@ -5,7 +5,7 @@ name: pipeline-dev
 on:
   # Triggers the workflow on push (and merge) events on the dev branch
   push:
-    branches: [prod]
+    branches: [dev]
 
 # Environment variables
 env:

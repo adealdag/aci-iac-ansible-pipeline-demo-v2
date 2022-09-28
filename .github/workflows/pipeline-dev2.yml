@@ -5,7 +5,7 @@ name: pipeline-dev-test
 on:
   # Triggers the workflow on push (and merge) events on the dev branch
   push:
-    branches: [dev]
+    branches: [prod]
 
 # Environment variables
 env:
