@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run pre-change analysis playbook
+      - name: Run pre-change analysis playbook for testing
         env:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
         run: |
