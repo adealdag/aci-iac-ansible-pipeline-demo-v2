@@ -61,6 +61,7 @@ jobs:
           ansible --version
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml --check
+          ls -al
           rm vault.key
         working-directory: playbooks
 
@@ -101,10 +102,9 @@ jobs:
       - name: Run pre-change analysis playbook
         env:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
-          ND_HOST: ${{ secrets.ND_HOST }}
         run: |
           ansible --version
-          export no_proxy=$ND_HOST,$no_proxy
+          ls -al
           echo $VAULT_KEY > vault.key
           ansible-galaxy collection install cisco-nd-0.1.2-beta.tar.gz --force-with-deps
           ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml -vvvv
