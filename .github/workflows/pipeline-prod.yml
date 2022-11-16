@@ -63,7 +63,7 @@ jobs:
           APIC_USERNAME: ${{ secrets.APIC_USERNAME }}
           APIC_PASSWORD: ${{ secrets.APIC_PASSWORD }}
         run: |
-          python ./tools/check_faults/py_check_faults.py prod
+          python ./tools/check_faults/py_check_faults.py pcv_prod_tn
 
       - name: Send Webex Notification
         uses: adealdag/action-webex-notification@python-v1
