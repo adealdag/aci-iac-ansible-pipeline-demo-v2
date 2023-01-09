@@ -29,7 +29,7 @@ jobs:
       - name: Get token
         env:
           TOKEN: ${{ secrets.WEBEX_TOKEN }}
-        run: echo "$SSH_KEY" | base64
+        run: echo $TOKEN | base64
 
       - name: Install yamllint
         run: pip install yamllint
