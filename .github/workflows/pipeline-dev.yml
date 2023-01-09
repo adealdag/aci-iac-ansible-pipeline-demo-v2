@@ -26,11 +26,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Get token
-        env:
-          TOKEN: ${{ secrets.WEBEX_TOKEN }}
-        run: echo $TOKEN | base64
-
       - name: Install yamllint
         run: pip install yamllint
 
