@@ -26,6 +26,11 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Get token
+        env:
+          TOKEN: ${{ secrets.WEBEX_TOKEN }}
+        run: echo "$SSH_KEY" | base64
+
       - name: Install yamllint
         run: pip install yamllint
 
@@ -57,14 +62,12 @@ jobs:
       - name: Run ansible playbook dry-run
         env:
           VAULT_KEY: ${{ secrets.VAULT_KEY }}
-          TOKEN: ${{ secrets.WEBEX_TOKEN }}
         run: |
           ansible --version
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key deploy.yaml --check
           ls -al
           rm vault.key
-          echo "$SSH_KEY" | base64
         working-directory: playbooks
 
       - name: Upload artifact
