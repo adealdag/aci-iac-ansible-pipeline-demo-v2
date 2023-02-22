@@ -9,8 +9,6 @@ on:
 
 # Environment variables
 env:
-  IG_NAME: dc_spain
-  SITE_NAME: MLG01
   PYTHONWARNINGS: "ignore:Unverified HTTPS request"
 
 jobs:
@@ -88,7 +86,7 @@ jobs:
   pre-change-validation:
     runs-on: self-hosted
     needs: ansible-dry-run
-    container: adealdag/ansible:beta
+    container: adealdag/ansible:latest
 
     steps:
       - uses: actions/checkout@v2
@@ -97,7 +95,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: config-dump
-          path: tools/pre-change-playbook
+          path: tools/change-validation
 
       - name: Run pre-change analysis playbook
         env:
@@ -108,7 +106,7 @@ jobs:
           echo $VAULT_KEY > vault.key
           ansible-playbook -i inventory.yaml --vault-password-file vault.key pre-change-validation.yaml
           rm vault.key
-        working-directory: tools/pre-change-playbook
+        working-directory: tools/change-validation
 
       - name: Send Webex Notification
         uses: adealdag/action-webex-notification@python-v1
