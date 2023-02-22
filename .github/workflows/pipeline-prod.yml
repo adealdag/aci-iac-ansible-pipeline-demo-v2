@@ -9,8 +9,6 @@ on:
 
 # Environment variables
 env:
-  IG_NAME: dc_spain
-  SITE_NAME: MLG01
   PYTHONWARNINGS: "ignore:Unverified HTTPS request"
 
 jobs:
@@ -31,6 +29,7 @@ jobs:
           export no_proxy=$APIC_HOST,$no_proxy
           python ./tools/trigger_backup/py_trigger_backup.py
 
+  # Deploy changes in production
   ansible-deploy:
     runs-on: self-hosted
     needs: [snapshot]
@@ -49,6 +48,7 @@ jobs:
           rm vault.key
         working-directory: playbooks
 
+  # Verify there are no faults in the tenant
   fault-check:
     runs-on: self-hosted
     needs: [ansible-deploy]
@@ -77,3 +77,36 @@ jobs:
             * Git SHA: ${{ github.sha }}
             * Status: ${{ job.status }}
             * Details URL: [Job Results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+  # Run post-change validation on Nexus Dashboard Insights
+  post-change-validation:
+    runs-on: self-hosted
+    needs: ansible-deploy
+    container: adealdag/ansible:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run post-change analysis playbook
+        env:
+          VAULT_KEY: ${{ secrets.VAULT_KEY }}
+        run: |
+          ansible --version
+          rm -rf $HOME/.ansible/pc
+          echo $VAULT_KEY > vault.key
+          ansible-playbook -i inventory.yaml --vault-password-file vault.key post-change-validation.yaml
+          rm vault.key
+        working-directory: tools/change-validation
+
+      - name: Send Webex Notification
+        uses: adealdag/action-webex-notification@python-v1
+        if: always()
+        with:
+          webexToken: ${{ secrets.WEBEX_TOKEN }}
+          roomID: ${{ secrets.ROOM_ID }}
+          markdownMsg: |
+            ### [${{ github.job }}] ${{ github.repository }} - ${{ github.event.head_commit.message }}
+            * Trigger: ${{ github.event_name }}
+            * Git SHA: ${{ github.sha }}
+            * Status: ${{ job.status }}
+            * Details URL: [Nexus Dashboard Insights](${{ secrets.ND_HOST }}/appcenter/cisco/nexus-insights/ui/#/troubleshoot/deltaAnalysis)
