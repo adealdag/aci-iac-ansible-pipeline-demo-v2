@@ -4,7 +4,7 @@ dcmdr:
       hosts:
         vnd02-mdr1.cisco.com:
           ansible_host: vnd02-mdr1.cisco.com
-          ansible_user: admin
+          ansible_user: ansible
           ansible_ssh_pass: !vault |
             $ANSIBLE_VAULT;1.1;AES256
             38313261363831666336663662323530323435323832373231393466653337333464646637653765
